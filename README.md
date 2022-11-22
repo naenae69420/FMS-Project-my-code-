@@ -21,7 +21,7 @@ I created a flashcard app that asks a question and tells you the answer after cl
 ### App Walk-though
 
 
-<img src="http://g.recordit.co/RYIdyt1kKW.gif" width=200><br>
+<img src="http://g.recordit.co/24sHtpFUfO.gif" width=200><br>
 
 
 
