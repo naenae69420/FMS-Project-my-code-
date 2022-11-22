@@ -1,0 +1,161 @@
+// add if click out of bounds, turns red, 
+var bgImg;
+var agImg;
+var musicAudio;
+var x1 = 0;
+var x2;
+let circleColor = 0;
+var scrollSpeed = 2;
+let song;
+
+function preload(){
+	//bgImg = loadImage("MousePog.jpg");
+    agImg = loadImage("balloons.jpg");
+    song = loadSound("MusicAudio.mp3");
+    soundEffect = loadSound("goodJob.mp3");
+}
+
+
+function setup() {
+  createCanvas(800, 600);
+  circleColor = color(0, 255, 0);
+  /*    let randomX = random(150, 650);
+    let randomY = random(150, 500);
+    let randomHeight = random(40, 60) */
+  circleX = 300
+  circleY = 300
+  circleH = 50
+  count = 0;
+  x2 = width; //new
+  song.loop();
+}
+
+
+function draw() {
+  
+  background(255, 200, 200);
+  //new
+  image(agImg, x1, 0, width, height);
+  image(agImg, x2, 0, width, height);
+  
+  x1 -= scrollSpeed;
+  x2 -= scrollSpeed;
+  
+  if (x1 < -width){
+    x1 = width;
+  }
+  if (x2 < width){
+    x2 = width;
+  }
+
+  setCircle()
+  aimCircle1();
+  
+  
+  currentLayout()
+function mousePressed() {
+if (song.isPlaying()) {
+    // .isPlaying() returns a boolean
+    song.pause(); // .play() will resume from .pause() position
+  } else {
+    song.play();
+  }
+
+}
+}
+
+function aimCircle1() {
+  if(mouseX < circleX + 25 && mouseX > circleX - 25 && mouseY < circleY + 25 && mouseY > circleY - 25) {
+
+    if(mouseIsPressed){
+      circle(circleX, circleY, circleH);
+      aimCircle2();
+      count++
+      soundEffect.play();
+    }
+    
+
+    
+  }
+  else {
+      fill(255,0,0);
+      circle(circleX, circleY, circleH);
+  }
+}
+
+function aimCircle2() {
+  circleX = random(250, 750);
+  circleY = random(100, 500);
+  circle(circleX,circleY,circleH);
+  if(mouseX < circleX + 25 && mouseX > circleX - 25 && mouseY < circleY + 25 && mouseY > circleY - 25) {
+    if(mouseIsPressed){
+      circle(circleX, circleY, circleH);
+      count++
+      soundEffect.play();
+    }
+  }
+  else {
+      fill(255,0,0);
+      circle(circleX, circleY, circleH);
+  }
+}
+
+function setCircle() {
+   fill(circleColor); 
+   circle(circleX, circleY, circleH);
+//  text("(" + mouseX + ", " + mouseY + ")", mouseX, mouseY)
+
+/*    circle(circleX, circleY, circleH);
+   if ((mouseX < 350 && mouseX > 250 && mouseY > 250 && mouseY < 350)) {
+       mouseIn = true;
+     if (mouseIn == true && mouseIsPressed) {
+       fill(0, 0, 0);
+        circle(circleX, circleY, circleH);
+     } 
+       } */
+}
+
+
+function currentLayout() {
+   fill(0, 0, 0);
+  textSize(50);
+  textStyle(BOLD);
+  text('AIMLABS', 280, 70);
+  
+  fill(255, 240, 130)
+  rect(285, 550, 200, 50)
+  
+  
+  textSize(32);
+  textStyle(BOLD);
+  fill(0, 0, 0)
+  text('QUIT', 350, 590)
+
+// Back part
+  textSize(15);
+  fill(255, 255, 255)
+  rect(10, 10, 60, 60)
+  fill(0, 0, 0)
+
+
+  text('Main', 15, 35)
+  text('Menu', 15, 55)
+  textSize(32)
+  fill(255, 255, 255)
+  rect(737, 10, 60, 60)
+  fill(0, 0, 0)
+  text(count, 750, 50)
+  textSize(16)
+  text('Counter:', 650, 50)
+  
+//Directions
+  fill(255, 255, 255)
+  rect(0, 200, 200, 100)
+  fill (0, 0, 0)
+  text('Your goal is to click on', 1, 225)
+  text('the red circle. Every', 1, 245)
+  text('successful click changes', 1, 265)
+  text('the circle\'s position', 1, 285)
+  
+  
+}
