@@ -9,3 +9,5 @@ Part of the Fine Motor Skills Project that helps toddlers enhance the fine motor
 
 Walkthrough:
 <img src="http://g.recordit.co/24sHtpFUfO.gif" width=200><br>
+
+
