@@ -1,0 +1,923 @@
+// Globals
+let BUTTONCOLOR = "lightyellow"
+let BGCOLOR = ("#FFC8C8")
+
+// Main menu
+let mainMenu_clicksound;
+let mainMenu_backgroundM;
+let mainMenu_slider;
+let mainMenu_MENU = 0;
+
+// Aimlabs
+var bgImg;
+var agImg;
+var musicAudio;
+var x1 = 0;
+var x2;
+let circleColor = 0;
+var scrollSpeed = 2;
+let song;
+let circleX1 = 100
+let circleY1 = 100
+let circleH1 = 25
+
+
+// Maze
+let circleX = 350;
+let circleY = 550;
+let r = 10;
+let moveX = 0;
+let moveY = 0;
+let collisionDetect = false;
+let collisionNum = 0;
+let oldCollisionDetect = collisionDetect;
+let end = false;
+let oldEnd = end;
+let collisionSound;
+let finishSound;
+let failSound
+
+// Number tracing
+let numberTracing_progressIndex = 0
+
+// PRELOAD FUNCTION____________________________________________________________________________
+function preload() {
+  //mainMenu_backgroundM = loadSound("mr_clown.mp3");
+  //mainMenu_backgroundM.setVolume(0.2);
+  //mainMenu_clicksound = loadSound("mixkit-positive-interface-beep-221.wav");
+  
+  //agImg = loadImage("balloons.jpg");
+  //song = loadSound("MusicAudio.mp3");
+  //soundEffect = loadSound("goodJob.mp3");
+  
+  //collisionSound = loadSound("stop.mp3")
+  //finishSound = loadSound("yay.mp3")
+  //failSound = loadSound("aw.mp3")
+}
+
+// SETUP FUNCTION______________________________________________________________________________
+function setup() {
+  createCanvas(800, 600);
+  
+  // Aimlabs
+  circleColor = color(0, 255, 0);
+  /*    let randomX = random(150, 650);
+    let randomY = random(150, 500);
+    let randomHeight = random(40, 60) */
+  circleX1 = 300
+  circleY1 = 300
+  circleH1 = 50
+  count = 0;
+  x2 = width; //new
+  //song.loop();
+}
+
+// MENU FUNCTION_______________________________________________________________________________
+function draw() {
+ //if (!mainMenu_backgroundM.isPlaying()) {
+ //   mainMenu_backgroundM.play();
+ //   mainMenu_backgroundM.loop();
+  //}
+  //if (mouseIsPressed) {
+ //   if (!mainMenu_clicksound.isPlaying()) {
+ //     mainMenu_clicksound.play();
+ //   }
+ // }
+
+  if (mainMenu_MENU == 0) {
+    stroke(0)
+    background(BGCOLOR);
+    background(255, 200, 200);
+    fill(BUTTONCOLOR);
+    rect(300, 50, 400, 80);
+    rect(400, 200, 200, 75);
+    rect(400, 350, 200, 75);
+    rect(400, 500, 200, 75);
+    textSize(40);
+    fill("black");
+    text("GAME", 440, 105);
+    text("START", 440, 255);
+    text("OPTIONS", 410, 403);
+    text("QUIT", 455, 552);
+  } else if (mainMenu_MENU == 1) {
+    background(BGCOLOR);
+    backButton(0)
+    
+    stroke(0)
+    fill(BUTTONCOLOR);
+    rect(300, 50, 400, 80);
+    rect(400, 200, 200, 75);
+    rect(400, 350, 200, 75);
+    rect(400, 500, 200, 75);
+
+    textSize(40);
+    fill("black");
+    text("Choose the Game", 340, 90);
+    text("<", 446, 130);
+    text("___", 450, 109);
+    if (mouseButton == RIGHT) {
+      MENU = 0;
+    }
+    text("Tracing", 430, 255);
+    text("Aimlabs", 430, 403);
+    text("3", 455, 552);
+  } else if (mainMenu_MENU == 4) {
+    stroke(0)
+    background(BGCOLOR);
+    backButton(0)
+    
+    
+    numberTracing()
+    
+    
+    
+  } else if (mainMenu_MENU == 5) {
+    
+    background(BGCOLOR);
+    backButton(0)
+
+    aimLabs()
+    backButton(0)
+    
+    
+    
+  } else if (mainMenu_MENU == 6) {
+    background(BGCOLOR);
+    backButton(0)
+
+    mazeGame()
+    backButton(0)
+    
+    
+  } else if (mainMenu_MENU == 2) {
+    stroke(0)
+    background(BGCOLOR);
+    backButton(0)
+    fill(BUTTONCOLOR);
+    rect(400, 200, 200, 75);
+    rect(400, 350, 200, 75);
+    textSize(40);
+    fill("black");
+    text("Volume", 440, 255);
+    text("Music", 410, 403);
+  } else if (mainMenu_MENU == 7) {
+    stroke(0)
+    background(BGCOLOR);
+    backButton(0)
+    
+    if (mainMenu_slider === undefined) {
+      mainMenu_slider = createSlider(0, 1, 0.2, 0.1);
+    }
+
+    mainMenu_backgroundM.setVolume(mainMenu_slider.value());
+    if (mouseButton == RIGHT) {
+      mainMenu_slider.remove();
+      MENU = 0;
+    }
+  } else if (mainMenu_MENU == 8) {
+    stroke(0)
+    background(BGCOLOR);
+    backButton(0)
+    textSize(20);
+    text("Right Click to return to MENU", 525, 30);
+    if (mouseButton == RIGHT) {
+      MENU = 0;
+    }
+  }
+  if (mainMenu_MENU == 3) {
+    stroke(0)
+    background(BGCOLOR);
+    backButton(0)
+    textSize(75);
+    text("COME AGAIN SOON!", 25, height / 2);
+  }
+}
+
+function mouseClicked() {
+  if (mainMenu_MENU == 0) {
+    if (mouseX < 600 && mouseX > 400) {
+      if (mouseY < 275 && mouseY > 200) {
+        mainMenu_MENU = 1;
+      }
+      if (mouseY < 425 && mouseY > 350) {
+        mainMenu_MENU = 2;
+      }
+      if (mouseY < 575 && mouseY > 500) {
+        mainMenu_MENU = 3;
+      }
+    }
+  } else if (mainMenu_MENU == 1) {
+    if (mouseX < 600 && mouseX > 400) {
+      if (mouseY < 575 && mouseX > 100) {
+        mainMenu_MENU = 0;
+      }
+      if (mouseY < 275 && mouseY > 200) {
+        mainMenu_MENU = 4;
+      }
+      if (mouseY < 425 && mouseY > 350) {
+        mainMenu_MENU = 5;
+      }
+      if (mouseY < 575 && mouseY > 500) {
+        mainMenu_MENU = 6;
+      }
+    }
+  } else if (mainMenu_MENU == 2) {
+    if (mouseX < 600 && mouseX > 400) {
+      if (mouseY < 275 && mouseY > 200) {
+        mainMenu_MENU = 7;
+      }
+      if (mouseY < 425 && mouseY > 350) {
+        mainMenu_MENU = 8;
+      }
+    }
+  }
+}
+
+// AIMLABS ____________________________________________________________________________________
+//function mousePressed() {
+//if (song.isPlaying()) {
+//    // .isPlaying() returns a boolean
+//    song.pause(); // .play() will resume from .pause() position
+//  } else {
+//    song.play();
+//  }
+//
+//}
+
+function aimLabs() {
+  background(BGCOLOR);
+  //new
+  //image(agImg, x1, 0, width, height);
+  //image(agImg, x2, 0, width, height);
+  
+  x1 -= scrollSpeed;
+  x2 -= scrollSpeed;
+  
+  if (x1 < -width){
+    x1 = width;
+  }
+  if (x2 < width){
+    x2 = width;
+  }
+
+  setCircle()
+  aimCircle1();
+  
+  
+  currentLayout()
+}
+function aimCircle1() {
+  if(dist(circleX1, circleY1, mouseX, mouseY) < 25) {
+
+    if(mouseIsPressed){
+      circle(circleX1, circleY1, circleH1);
+      aimCircle2();
+      count++
+      //soundEffect.play();
+    }
+    
+
+    
+  }
+  else {
+      fill(255,0,0);
+      circle(circleX1, circleY1, circleH1);
+  }
+}
+
+function aimCircle2() {
+  circleX1 = random(250, 750);
+  circleY1 = random(100, 500);
+  circle(circleX1,circleY1,circleH1);
+  if(mouseX < circleX1 + 25 && mouseX > circleX1 - 25 && mouseY < circleY1 + 25 && mouseY > circleY - 25) {
+    if(mouseIsPressed){
+      circle(circleX1, circleY1, circleH1);
+      count++
+      //soundEffect.play();
+    }
+  }
+  else {
+      fill(255,0,0);
+      circle(circleX1, circleY1, circleH1);
+  }
+}
+
+function setCircle() {
+   fill(circleColor); 
+   circle(circleX1, circleY1, circleH1);
+//  text("(" + mouseX + ", " + mouseY + ")", mouseX, mouseY)
+
+/*    circle(circleX, circleY, circleH);
+   if ((mouseX < 350 && mouseX > 250 && mouseY > 250 && mouseY < 350)) {
+       mouseIn = true;
+     if (mouseIn == true && mouseIsPressed) {
+       fill(0, 0, 0);
+        circle(circleX, circleY, circleH);
+     } 
+       } */
+}
+
+
+function currentLayout() {
+   fill(0, 0, 0);
+  textSize(50);
+  textStyle(BOLD);
+  text('AIMLABS', 280, 70);
+  
+
+
+
+// Back part
+
+  textSize(32)
+  fill(255, 255, 255)
+  rect(737, 10, 60, 60)
+  fill(0, 0, 0)
+  text(count, 750, 50)
+  textSize(16)
+  text('Counter:', 650, 50)
+  
+//Directions
+  fill(255, 255, 255)
+  rect(0, 200, 200, 100)
+  fill (0, 0, 0)
+  text('Your goal is to click on', 1, 225)
+  text('the red circle. Every', 1, 245)
+  text('successful click changes', 1, 265)
+  text('the circle\'s position', 1, 285)
+  
+  
+}
+
+// NUMBER TRACING _____________________________________________________________________________
+
+// Function for number tracing game
+function numberTracing() {
+  
+  // Background
+  background(BGCOLOR);
+  
+  // Title rectangle
+  stroke(0)
+  fill("#87CEEB")
+  rect(250, 50, 300, 50)
+  
+  // Title text
+  stroke(0)
+  fill("black")
+  textSize(32)
+  noStroke()
+  text("Number tracing", 290, 85)
+  
+  // Instruction text
+  textSize(20)
+  text("Trace the number by \nclicking and following \nthe dots!", 500, 250)
+  
+  
+  // Numbers
+  number = 1
+  
+  if (number == 1) {
+    // Draw one
+    
+    numberTracing_oneLoop()
+  }
+  
+  backButton(0)
+}
+
+// Function for processing character '1'
+function numberTracing_oneLoop() {
+  
+  // Draw '1'
+  numberTracing_drawOne()
+  
+  // Draw objective
+  numberTracing_objective()
+  
+}
+
+// Function for drawing character '1'
+function numberTracing_drawOne() {
+  noStroke()
+  fill("#FFE5B4")
+  rect(375, 150, 50, 300)
+  rect(325, 150, 100, 50)
+  rect(325, 400, 150, 50)
+  
+  stroke(0)
+  line(325, 150, 425, 150)
+  line(425, 150, 425, 400)
+  line(425, 400, 475, 400)
+  line(475, 400, 475, 450)
+  line(325, 150, 325, 200)
+  line(325, 200, 375, 200)
+  line(375, 200, 375, 400)
+  line(325, 400, 375, 400)
+  line(325, 400, 325, 450)
+  line(325, 450, 475, 450)
+}
+
+// Function for objective for number tracing
+function numberTracing_objective() {
+  
+  // Draw correct objective and detect next
+  
+  if (!mouseIsPressed & numberTracing_progressIndex != 5) {
+    numberTracing_progressIndex = 0
+  }
+  
+  if (numberTracing_progressIndex == 5) {
+    stroke(0)
+    fill("lightgreen")
+    rect(250, 250, 300, 50)
+    
+    fill("black")
+    textSize(32);
+    text('Complete!', 325, 285);
+  }
+  
+  if (numberTracing_progressIndex == 4) {
+
+      // Draw objective
+      stroke(0)
+      fill("#39FF14")
+      circle(450, 425, 25)
+    
+      if (mouseIsPressed) {
+
+        // Draw cursor
+        stroke(0)
+        fill("yellow")
+        circle(mouseX, mouseY, 25)
+
+        // If mouse touches objective, move to next objective
+        if (dist(450, 425, mouseX, mouseY) < 10) {
+          numberTracing_progressIndex = 5
+          
+        }
+      }
+    }
+  
+  if (numberTracing_progressIndex == 3) {
+
+      // Draw objective
+      stroke(0)
+      fill("#39FF14")
+      circle(350, 425, 25)
+    
+      if (mouseIsPressed) {
+
+        // Draw cursor
+        stroke(0)
+        fill("yellow")
+        circle(mouseX, mouseY, 25)
+
+        // If mouse touches objective, move to next objective
+        if (dist(350, 425, mouseX, mouseY) < 10) {
+          numberTracing_progressIndex = 4
+          
+        }
+      }
+    }
+  
+  if (numberTracing_progressIndex == 2) {
+
+      // Draw objective
+      stroke(0)
+      fill("#39FF14")
+      circle(400, 425, 25)
+    
+      if (mouseIsPressed) {
+
+        // Draw cursor
+        stroke(0)
+        fill("yellow")
+        circle(mouseX, mouseY, 25)
+
+        // If mouse touches objective, move to next objective
+        if (dist(400, 425, mouseX, mouseY) < 10) {
+          numberTracing_progressIndex = 3
+          
+        }
+      }
+    }
+  
+  if (numberTracing_progressIndex == 1) {
+
+      // Draw objective
+      stroke(0)
+      fill("#39FF14")
+      circle(400, 175, 25)
+    
+      if (mouseIsPressed) {
+
+        // Draw cursor
+        stroke(0)
+        fill("yellow")
+        circle(mouseX, mouseY, 25)
+
+        // If mouse touches objective, move to next objective
+        if (dist(400, 175, mouseX, mouseY) < 10) {
+          numberTracing_progressIndex = 2
+          
+        }
+      }
+    }
+  
+  if (numberTracing_progressIndex == 0) {
+    // Draw objective
+    stroke(0)
+    fill("#39FF14")
+    circle(350, 175, 25)
+    
+    if (mouseIsPressed) {
+      
+      // Draw cursor
+      stroke(0)
+      fill("yellow")
+      circle(mouseX, mouseY, 25)
+      
+      // If mouse touches objective, move to next objective
+      if (dist(350, 175, mouseX, mouseY) < 10) {
+        numberTracing_progressIndex = 1
+      }
+    }
+  }
+}
+
+// MAZE _______________________________________________________________________________________
+function mazeGame() {
+  background(255,200,200);
+  stroke(0)
+  
+  fill(255,255,255); //default color white
+  
+  rect(300,0,200,100);
+  textSize(40);
+  fill(0,0,0);
+  text('MAZE',340,60); //Title Text Box
+  
+  
+  fill(255,255,255);
+  rect(0,200,200,100);
+  textSize(15);
+  fill(0,0,0);
+  text('1. Use the arrow keys to get',5,220);
+  text('to the star',25,235);
+  text('2. Don\'t hit the walls',5,250);
+  text('3. Try to get to the star in',5,265);
+  text('less than 6 collisions!',25,280);    //Directions box
+  
+  
+  fill(255,255,255);
+  rect(500,0,75,25);
+  textSize(20);
+  fill(0,0,0);
+  text('Reset',510,20); //Reset button
+  
+  
+  fill(255,255,255);
+  rect(0,525,75,75); //Left Arrow Box
+  rect(75,525,75,75); //Down Arrow Box
+  rect(150,525,75,75); //Right Arrow Box
+  rect(75,450,75,75); //Up Arrow Box
+  
+  fill(255,255,255);
+  rect(700,0,100,100);
+  textSize(20);
+  fill(0,0,0);
+  text('Collisions: ',705,40);
+  textSize(40);
+  text(collisionNum,735,80)//collision counter UI
+  
+  fill(255,255,255);
+  line(10,562.5,65,562.5);
+  line(10,562.5,37.5,535);
+  line(10,562.5,37.5,590);
+  line(160,562.5,215,562.5);
+  line(215,562.5,187.5,535);
+  line(215,562.5,187.5,590);
+  line(112.5,535,112.5,590);
+  line(85,562.5,112.5,590);
+  line(140,562.5,112.5,590);
+  line(112.5,515,112.5,460);
+  line(112.5,460,85,487.5);
+  line(112.5,460,140,487.5);
+  
+  drawMaze1();
+  drawStar(350,250,15,35,5);
+  drawPerson();
+  interaction1();
+  oldCollisionDetect = collisionDetect;
+  boundaryCheck();
+  collisionCounter();
+  finish();
+  endSoundDetect();
+  oldEnd = end;
+  resetButton();
+}
+
+function drawMaze1() {
+  rect(300,200,500,400);
+  line(300,500,400,500);
+  line(500,600,500,400);
+  line(400,400,500,400);
+  line(300,300,600,300);
+  line(600,300,600,500);
+  line(700,300,700,500);
+  line(700,300,800,300);
+}
+
+function drawMaze1() {
+  rect(300,200,500,400);
+  line(300,500,400,500);
+  line(500,600,500,400);
+  line(400,400,500,400);
+  line(300,300,600,300);
+  line(600,300,600,500);
+  line(700,300,700,500);
+  line(700,300,800,300);
+}
+
+function drawStar(x,y,radius1,radius2, npoints) {
+  let angle = TWO_PI / npoints;
+  let halfAngle = angle / 2.0;
+  beginShape();
+  for (let a = 0; a < TWO_PI; a += angle) {
+    let sx = x + cos(a) * radius2;
+    let sy = y + sin(a) * radius2;
+    vertex(sx, sy);
+    sx = x + cos(a + halfAngle) * radius1;
+    sy = y + sin(a + halfAngle) * radius1;
+    vertex(sx, sy);
+  }
+  endShape(CLOSE);
+}
+
+function drawPerson(){
+  if(end == true) {
+    return
+  }
+  circle(circleX,circleY,2*r);
+  
+    if(keyIsDown(RIGHT_ARROW)) {
+      circleX += 3;
+    }
+    else if(keyIsDown(LEFT_ARROW)) {
+      circleX -= 3;
+    }
+    else if(keyIsDown(UP_ARROW)) {
+      circleY -= 3;
+    }
+    else if(keyIsDown(DOWN_ARROW)){
+      circleY += 3;
+    }
+}
+  
+function interaction1(){
+  moveX = 0;
+  moveY = 0;
+  
+  if(collisionDetect == false){
+    fill('rgba(0,255,0, 0.60)');
+  }
+  else {
+    fill('rgba(255,0,0, 0.60)')    //collision color interaction
+  }                                
+
+  if(keyIsDown(RIGHT_ARROW)){
+    rect(150,525,75,75);
+    moveX = 1;
+  }
+  else if(keyIsDown(LEFT_ARROW)) {
+    rect(0,525,75,75);
+    moveX = -1;
+  }
+  else if(keyIsDown(UP_ARROW)) {
+    rect(75,450,75,75);
+    moveY = -1;
+  }
+  else if(keyIsDown(DOWN_ARROW)){
+    rect(75,525,75,75);
+    moveY = 1;
+  }
+} 
+
+//Boundary Interaction
+function boundaryCheck(){
+  collisionDetect = false;
+
+//left boundary
+  if(circleX - r < 300 && circleX + r > 300 && circleY - r < 600 && circleY + r > 200) {
+      collisionDetect = true;
+      if(moveX == 1){
+        circleX = 300 - r;
+      }
+      else if(moveX == -1){
+        circleX = 300 + r;
+      }
+    }
+
+//top boundary
+  if(circleX - r < 800 && circleX + r > 300 && circleY - r < 200 && circleY + r > 200) {
+      collisionDetect = true;  
+      if(moveY == 1){
+        circleY = 200 - r;
+      }
+      else if(moveY == -1){
+        circleY = 200 + r;
+      }
+  }
+
+//right boundary
+  if(circleX - r < 800 && circleX + r > 800 && circleY - r < 600 && circleY + r > 200) {
+      collisionDetect = true;
+      if(moveX == 1){
+        circleX = 800 - r;
+      }
+      else if(moveX == -1){
+        circleX = 800 + r;
+      }
+  }
+  
+//bottom boundary
+  if(circleX - r < 800 && circleX + r > 300 && circleY - r < 600 && circleY + r > 600) {
+      collisionDetect = true; 
+      if(moveY == 1){
+        circleY = 600 - r;
+      }
+      else if(moveY == -1){
+        circleY = 600 + r;
+      }
+    }
+
+//line(300,500,400,500)
+  if(circleX - r < 400 && circleX + r > 300 && circleY - r < 500 && circleY + r > 500) {
+      collisionDetect = true;
+      if(moveY == 1) {
+        circleY = 500 - r;
+      }
+      else if(moveY == -1) {
+        circleY = 500 + r;
+      }
+      if(moveX == -1) {
+        circleX = 400 + r;
+      }
+    }
+
+//line(400,400,500,400)
+  if(circleX - r < 500 && circleX + r > 400 && circleY - r < 400 && circleY + r > 400) {
+    collisionDetect = true;
+    if(moveY == 1) {
+      circleY = 400 - r;
+    }
+    else if(moveY == -1) {
+      circleY = 400 + r;
+    }
+    if(moveX == 1) {
+      circleX = 400 - r;
+    }
+  }
+
+//line(500,600,500,400)
+  if(circleX - r < 500 && circleX + r > 500 & circleY - r < 600 && circleY + r > 400) {
+    collisionDetect = true; 
+    if(moveX == 1) {
+      circleX = 500 - r;
+    }
+    else if(moveX == -1) {
+      circleX = 500 + r;
+    }
+  }
+
+//line(300,300,600,300)
+  if(circleX - r < 600 && circleX + r > 300 && circleY - r < 300 && circleY + r > 300) {
+    collisionDetect = true;
+    if(moveY == 1) {
+      circleY = 300 - r;
+    }
+    else if(moveY == -1) {
+      circleY = 300 + r;
+    }
+    if(moveX == -1) {
+      circleX = 600 + r;
+    }
+  }  
+
+//line(600,300,600,500)
+  if(circleX - r < 600 && circleX + r > 600 && circleY - r < 500 && circleY + r > 300){
+    collisionDetect = true; 
+    if(moveX == 1) {
+      circleX = 600 - r;
+    }
+    else if(moveX == -1) {
+      circleX = 600 + r;
+    }
+    if(moveY == -1) {
+      circleY = 500 + r;
+    }
+  }
+  
+//line(700,300,800,300)  
+  if(circleX - r < 800 && circleX + r > 700 && circleY - r < 300 && circleY + r > 300){
+    collisionDetect = true;
+    if(moveY == 1) {
+      circleY = 300 - r;
+    }
+    else if(moveY == -1) {
+      circleY = 300 + r;
+    }
+    if(moveX == 1) {
+      circleX = 700 - r;
+    }
+  }
+//line(700,300,700,500)
+  if(circleX - r < 700 && circleX + r > 700 && circleY - r < 500 && circleY + r > 300){
+     collisionDetect = true;
+    if(moveX == 1){
+      circleX = 700 - r;
+    }
+    else if(moveX == -1){
+      circleX = 700 + r;
+    }
+    if(moveY == -1) {
+      circleY = 500 + r;
+    }
+  }
+  
+}
+
+//Collision counter
+function collisionCounter() {
+  if(oldCollisionDetect != collisionDetect && collisionDetect == true) {
+      collisionNum++
+      //collisionSound.play();
+    }
+}
+
+//Win Scenario
+function finish() {
+  if(circleX - r < 385 && circleY - r < 300 && circleY + r > 200) {
+    fill(255, 204, 0);
+    drawStar(350,250,15,35,5);
+    if(collisionNum <= 5){
+    fill(0, 0, 255);
+    textSize(100);
+    text('You Win!', 200, 200);
+    end = true;
+    }
+    else {
+    fill(255,0,0);
+    textSize(100);
+    text('Try Again!', 200, 200);
+    end = true;
+    }
+  }
+}
+
+//Reset Button
+function resetButton() {
+  if((mouseX < 575 && mouseX > 500 && mouseY < 25 && mouseY > 0 && mouseIsPressed) || (keyIsPressed && keyCode == 82)) {
+    end = false;
+    fill(220,220,220);
+    rect(500,0,75,25);
+    textSize(20);
+    fill(255,255,255);
+    text('Reset',510,20);
+    circleX = 350;
+    circleY = 550;
+    collisionNum = 0;
+  }                     
+}
+
+function endSoundDetect(){
+  if(oldEnd != end && end == true && collisionNum <= 5){
+    //finishSound.play();
+  }
+  if(oldEnd != end && end == true && collisionNum > 5 ){
+    //failSound.play();
+  }
+}
+
+
+
+
+
+// BACK BUTTON_________________________________________________________________________________
+function backButton(menuNumber) {
+  
+  // Draw
+  stroke(0)
+  fill("lightyellow")
+  rect(0, 0, 100, 50)
+  textSize(30)
+  noStroke()
+  fill("black")
+  text("Back", 15, 37)
+  
+  // On click
+  if (mouseIsPressed & mouseX < 100 & mouseY < 50) {
+    mainMenu_MENU = menuNumber
+  }
+}
